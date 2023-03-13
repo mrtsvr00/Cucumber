@@ -6,13 +6,12 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import pages.AmazonPage;
 import utilities.ConfigReader;
 import utilities.Driver;
 import utilities.ReusableMethods;
 
-public class AmazonStepdefinitions {
+public class AmazonStepDefinitions {
     AmazonPage amazonPage = new AmazonPage();
 
     @Given("kullanici Amazon anasayfaya gider")
@@ -86,16 +85,28 @@ public class AmazonStepdefinitions {
         Driver.getDriver().get(ConfigReader.getProperty(istenenUrl));
 
     }
+
     @Then("{string} anasayfasina gittigini test eder")
     public void anasayfasina_gittigini_test_eder(String istenenUrl) {
 
         String actualUrl = Driver.getDriver().getCurrentUrl();
-        String expectedUrl = istenenUrl + "/";
+        String expectedUrl = ConfigReader.getProperty(istenenUrl);
 
         Assert.assertEquals(expectedUrl, actualUrl);
 
     }
 
+    @When("{int}.urune gider")
+    public void urune_gider(Integer istenenIndex) {
+        amazonPage.istenenUrunElementi(istenenIndex).click();
+    }
+
+    @Then("urun isminin {string} icerdigini test eder")
+    public void urun_isminin_icerdigini_test_eder(String arananKelime) {
+
+        String actualUrunIsmi = amazonPage.ilkUrunIsimElementi.getText();
+        Assert.assertTrue(actualUrunIsmi.contains(arananKelime));
+
+    }
+
 }
-
-
